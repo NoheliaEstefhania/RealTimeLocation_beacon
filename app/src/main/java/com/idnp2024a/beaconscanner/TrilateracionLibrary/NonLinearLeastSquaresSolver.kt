@@ -92,6 +92,6 @@ class NonLinearLeastSquaresSolver(
     }
 
     companion object {
-        protected const val MAXNUMBEROFITERATIONS: Int = 1000
+        protected const val MAXNUMBEROFITERATIONS: Int = 5000
     }
 }

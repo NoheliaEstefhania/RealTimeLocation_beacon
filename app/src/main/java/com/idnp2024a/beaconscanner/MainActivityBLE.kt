@@ -40,6 +40,8 @@ class MainActivityBLE : AppCompatActivity() {
     private lateinit var txtMessage: TextView
     private lateinit var txtMessage2: TextView
     private lateinit var txtMessage3: TextView
+    private lateinit var trilateration: TextView
+
 
     private val permissionManager = PermissionManager.from(this)
     private val beacons = HashMap<String, Beacon>();
@@ -62,7 +64,7 @@ class MainActivityBLE : AppCompatActivity() {
         txtMessage = findViewById(R.id.txtMessage)
         txtMessage2 = findViewById(R.id.txtMessage2)
         txtMessage3 = findViewById(R.id.txtMessage3)
-
+        trilateration = findViewById(R.id.trilateration)
         val scanCallBack  = createBleScanCallback();
         btnAdvertising.setOnClickListener { handleAdvertisingClick() }
         btnStart.setOnClickListener { handleStartClick(scanCallBack) }
@@ -254,11 +256,16 @@ class MainActivityBLE : AppCompatActivity() {
                             1 -> txtMessage2.text = beaconSave.toString() + " distance " + rounded_distance
                             2 -> txtMessage3.text = beaconSave.toString() + " distance " + rounded_distance
                         }
+//                        val positions = arrayOf(
+//                            doubleArrayOf(0.0, 0.0),
+//                            doubleArrayOf(730.0, 0.0),
+//                            doubleArrayOf(730.0, 775.0)
+//                            )
                         val positions = arrayOf(
-                            doubleArrayOf(240.0, 0.0),
                             doubleArrayOf(0.0, 0.0),
-                            doubleArrayOf(120.0, 120.0)
-                            )
+                            doubleArrayOf(600.0, 0.0),
+                            doubleArrayOf(600.0, 545.0)
+                        )
 
                         val b1 = "2f234454cf6d4a0fadf2f4911ba9ffb6"
                         val b2 = "2f234454cf6d4a0fadf2f4911ba9ffb7"
@@ -366,6 +373,7 @@ class MainActivityBLE : AppCompatActivity() {
 
 //        Log.d("solutions", "linealSolve ${linealSolve}")
         Log.d("solutions", "no linealSolve ${nolinealSolve.point}")
+        trilateration.text = " trilateracion no lineal " + nolinealSolve.point + "\n" + "lineal " + linealSolve
     }
 
 
