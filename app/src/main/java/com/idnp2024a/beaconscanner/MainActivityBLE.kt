@@ -22,15 +22,11 @@ import androidx.core.location.LocationManagerCompat
 import com.idnp2024a.beaconscanner.BeaconScanerLibrary.Beacon
 import com.idnp2024a.beaconscanner.BeaconScanerLibrary.BeaconParser
 import com.idnp2024a.beaconscanner.BeaconScanerLibrary.BleScanCallback
-import com.idnp2024a.beaconscanner.permissions.BTPermissions
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlin.math.round
-import kotlin.math.roundToLong
-import android.os.Handler
-import android.os.Looper
 import com.idnp2024a.beaconscanner.TrilateracionLibrary.LinearLeastSquaresSolver
 import com.idnp2024a.beaconscanner.TrilateracionLibrary.NonLinearLeastSquaresSolver
 import com.idnp2024a.beaconscanner.TrilateracionLibrary.TrilaterationFunction
+import com.idnp2024a.beaconscanner.permissions.BTPermissions
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer
 
 
@@ -215,9 +211,9 @@ class MainActivityBLE : AppCompatActivity() {
 
                 // Definir una lista de UUIDs permitidos
                 val allowedUUIDs = listOf(
-                    "2f234454cf6d4a0fadf2f4911ba9ffa6",
-                    "2f234454cf6d4a0fadf2f4911ba9ffa7",
-                    "another-uuid-2"
+                    "2f234454cf6d4a0fadf2f4911ba9ffb6",
+                    "2f234454cf6d4a0fadf2f4911ba9ffb7",
+                    "2f234454cf6d4a0fadf2f4911ba9fff8"
                     // Añade más UUIDs aquí
                 )
 
@@ -249,7 +245,7 @@ class MainActivityBLE : AppCompatActivity() {
                         // Actualiza el LiveData _resultBeacons con los detalles del beacon y la distancia.
                         _resultBeacons.value = beaconSave.toString() + " distance " + distance
 
-                        Log.d(TAG, beaconSave.toString() + " distance " + distance)
+                        Log.d(TAG, beaconSave.uuid + " distance " + distance)
 
                         // Formatea la distancia a dos decimales.
                         val rounded_distance = String.format("%.2f", distance).toDouble()
@@ -259,16 +255,23 @@ class MainActivityBLE : AppCompatActivity() {
                             2 -> txtMessage3.text = beaconSave.toString() + " distance " + rounded_distance
                         }
                         val positions = arrayOf(
-                            doubleArrayOf(250.0, 200.0),
-                            doubleArrayOf(0.0, 0.0)
-                        )
-
-                        if(beacons.get("2f234454cf6d4a0fadf2f4911ba9ffa6")?.distance != null &&
-                            beacons.get("2f234454cf6d4a0fadf2f4911ba9ffa7")?.distance != null){
-                            val distances= doubleArrayOf(
-                                beacons.get("2f234454cf6d4a0fadf2f4911ba9ffa6")?.distance!!.toDouble(),
-                                beacons.get("2f234454cf6d4a0fadf2f4911ba9ffa7")?.distance!!.toDouble(),
+                            doubleArrayOf(240.0, 0.0),
+                            doubleArrayOf(0.0, 0.0),
+                            doubleArrayOf(120.0, 120.0)
                             )
+
+                        val b1 = "2f234454cf6d4a0fadf2f4911ba9ffb6"
+                        val b2 = "2f234454cf6d4a0fadf2f4911ba9ffb7"
+                        val b3 = "2f234454cf6d4a0fadf2f4911ba9fff8"
+                        if(beacons.get(b1)?.distance != null &&
+                            beacons.get(b2)?.distance != null &&
+                            beacons.get(b3)?.distance != null){
+                            var distances= doubleArrayOf(
+                                beacons.get(b1)?.distance!!.toDouble(),
+                                beacons.get(b2)?.distance!!.toDouble(),
+                                beacons.get(b3)?.distance!!.toDouble()
+                            )
+//                            Log.d("distances", beacons.get(b1)?.distance.toString() + "/" + beacons.get(b2)?.distance.toString() + "/  "/* beacons.get(b3)?.distance.toString()*/)
                             trilateration2DZeroDistance(positions, distances)
                         }
 
@@ -351,14 +354,27 @@ class MainActivityBLE : AppCompatActivity() {
         beaconsList
     }
     fun trilateration2DZeroDistance(positions: Array<DoubleArray>, distance: DoubleArray){
-        val trilaterationFunction = TrilaterationFunction(positions, distance)
-        val lineal = LinearLeastSquaresSolver(trilaterationFunction)
-        val nolineal = NonLinearLeastSquaresSolver(trilaterationFunction, LevenbergMarquardtOptimizer())
+        var trilaterationFunction = TrilaterationFunction(positions, distance)
+        var lineal = LinearLeastSquaresSolver(trilaterationFunction)
+        var nolineal = NonLinearLeastSquaresSolver(trilaterationFunction, LevenbergMarquardtOptimizer())
 
-        val linealSolve = lineal.solve()
-        val nolinealSolve =  nolineal.solve()
+        var linealSolve = lineal.solve()
+        var nolinealSolve =  nolineal.solve()
 
-        Log.d(TAG, "linealSolve ${linealSolve}")
-        Log.d(TAG, "no linealSolve ${nolinealSolve}")
+        var lineals = printDoubleArray(linealSolve.toArray())
+        var nonlinea = printDoubleArray(nolinealSolve.getPoint().toArray())
+
+//        Log.d("solutions", "linealSolve ${linealSolve}")
+        Log.d("solutions", "no linealSolve ${nolinealSolve.point}")
+    }
+
+
+    private fun printDoubleArray(values: DoubleArray) : String {
+        var output = ""
+        for (p in values) {
+            output = output + "p -- "
+        }
+        output = "\n"
+        return output
     }
 }

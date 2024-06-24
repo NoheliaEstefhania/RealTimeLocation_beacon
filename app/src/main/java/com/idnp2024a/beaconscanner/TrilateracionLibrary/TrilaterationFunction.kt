@@ -1,5 +1,6 @@
 package com.idnp2024a.beaconscanner.TrilateracionLibrary
 
+import android.util.Log
 import org.apache.commons.math3.fitting.leastsquares.MultivariateJacobianFunction
 import org.apache.commons.math3.linear.Array2DRowRealMatrix
 import org.apache.commons.math3.linear.ArrayRealVector
@@ -38,6 +39,8 @@ class TrilaterationFunction(positions: Array<DoubleArray>, distances: DoubleArra
 
         this.positions = positions
         this.distances = distances
+        Log.d("positions",positions[0][1].toString())
+        Log.d("distances",distances[0].toString() +" / " + distances[1].toString())
     }
 
     /**
