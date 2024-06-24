@@ -41,6 +41,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    implementation("androidx.compose.ui:ui:1.4.0")
+    implementation("androidx.compose.material:material:1.4.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.0")
+    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.compose.material3:material3:1.1.0")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.0")
     //implementation(files("C:\\Ernesto\\Projects\\GalleryArt\\Beacons\\android-beacon-library-2.17.1.aar"))
 //    implementation(fileTree(mapOf(
 //        "dir" to "C:\\Ernesto\\Projects\\GalleryArt\\Beacons",
